@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Todo</title>
+	<link rel="stylesheet" type="text/css" href="../node_modules/jasmine-core/lib/jasmine-core/jasmine.css">
+	<script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
+	<script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
+	<script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
+	<script type="text/javascript" src="../node_modules/angular/angular.min.js"></script>
+	<script type="text/javascript" src="../node_modules/angular-mocks/angular-mocks.js"></script>
+
+	<script type="text/javascript">
+
+		angular.module('TodoApp', []); // create module
+		angular.module('TodoApp') // get module
+			.controller('listCtrl', function($scope) {
+				$scope.todos = [
+					'buy milk',
+					'pickup kids',
+					'read book'
+				];
+			});
+
+		describe('Todo Application', function() {
+
+			beforeEach(module('TodoApp'));
+			var $controller;
+			beforeEach(inject(function(_$controller_) {
+				$controller = _$controller_;
+			}));
+
+			describe('list', function() {
+				it('should have list of 3 todos', function() {
+					var $scope = {};
+					var ctrl = $controller('listCtrl', {$scope: $scope});
+					expect($scope.todos.length).toBe(3);
+				}); 
+			})
+		});		
+
+
+	</script>
+</head>
+<body>
+
+</body>
+</html>
