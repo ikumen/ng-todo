@@ -2,28 +2,16 @@
 <html>
 <head>
 	<title>Todo</title>
-	<link rel="stylesheet" type="text/css" href="../node_modules/jasmine-core/lib/jasmine-core/jasmine.css">
-	<script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine.js"></script>
-	<script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/jasmine-html.js"></script>
-	<script type="text/javascript" src="../node_modules/jasmine-core/lib/jasmine-core/boot.js"></script>
-	<script type="text/javascript" src="../node_modules/angular/angular.min.js"></script>
-	<script type="text/javascript" src="../node_modules/angular-mocks/angular-mocks.js"></script>
+	<script type="text/javascript" src="bundle.js"></script>
 
-	<script type="text/javascript">
-
-		angular.module('TodoApp', []); // create module
-		angular.module('TodoApp') // get module
-			.controller('listCtrl', function($scope) {
-				$scope.todos = [
-					'buy milk',
-					'pickup kids',
-					'read book'
-				];
-			});
-
-	</script>
 </head>
-<body>
-
+<body ng-app="TodoApp">
+	<div ng-controller="listCtrl">
+		<ul>
+			<li ng-repeat="todo in todos">
+				{{todo}}
+			</li>
+		</ul>
+	</div>
 </body>
 </html>

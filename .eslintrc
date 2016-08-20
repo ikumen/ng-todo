@@ -4,7 +4,7 @@
     "mocha": true,
     "node": true,
     "amd": false
-},
+  },
   "rules": {
     "no-alert": 2,
     "no-array-constructor": 2,
