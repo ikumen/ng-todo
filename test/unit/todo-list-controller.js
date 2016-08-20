@@ -12,7 +12,7 @@ describe('Todo Application', function() {
 		it('should have list of 3 todos', function() {
 			var $scope = {};
 			var ctrl = $controller('listCtrl', {$scope: $scope});
-			expect($scope.todos.length).toBe(3);
+			expect($scope.todos.length).toBe(4);
 		}); 
 	})
 });		

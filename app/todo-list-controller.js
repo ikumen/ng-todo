@@ -10,7 +10,8 @@
 				$scope.todos = [
 					'buy milk',
 					'pickup kids',
-					'read book'
+					'read book',
+					'another'
 				]
 			});
 })();
