@@ -2,7 +2,7 @@
 
 angular.module('TodoApp', [])
 
-	.controller('listCtrl', function($scope) {
+	.controller('listCtrl', function($scope, TodoService) {
 		$scope.todos = [
 			'buy milk',
 			'pickup kids',
@@ -19,8 +19,20 @@ angular.module('TodoApp', [])
 		}
 	})
 
-	.factory('TodoService', function(Utils) {
+	.factory('TodoService', function($q, Utils) {
 		var _store = [];
+
+		function resolve(o) {
+			var deferred = $q.defer();
+			deferred.resolve(o);
+			return deferred.promise;
+		}
+
+		function reject(o) {
+			var deferred = $q.defer();
+			deferred.reject(o);
+			return deferred.promise;
+		}
 
 		function _generateId() {
 			return new Date().getTime();
@@ -43,36 +55,37 @@ angular.module('TodoApp', [])
 					done: false
 				};
 				_store.push(todo);
-				return todo;
+				return resolve(todo);
+				
 			},
 			update: function(todo) {
 				var index;
 				if(todo && todo.id && (index = _getIndex(todo.id)) >= 0) {
 					_store[index].text = todo.text || _store[index].text;
 					_store[index].done = todo.done !== undefined ? todo.done :_store[index].done;
-					return todo;
+					return resolve(todo);
 				}
-				return null;
+				return reject({status: 404});
 			},
 			get: function(id) {
 				var index;
 				if(id && (index = _getIndex(id)) >= 0) {
-					return _store[index];
+					return resolve(_store[index]);
 				}
-				return null;
+				return reject({status: 404});
 			},
 			list: function() {
 				var todos = [];
 				Utils.copy(_store, todos);
-				return todos;
+				return resolve(todos);
 			},
 			delete: function(id) {
 				var index;
 				if(id && (index = _getIndex(id)) >= 0) {
 					_store.splice(index, 1);
-					return id;
+					return resolve(id);
 				}
-				return null;
+				return reject({status: 404});
 			}
 		}
 
