@@ -1,20 +1,38 @@
 'use strict';
 
+angular.module('TodoAppTest', [])
+	.factory('testHelper', function() {
+
+});
+
 describe('Todo Application', function() {
 
 	beforeEach(module('TodoApp'));
-	var $controller;
-
+	
 	describe('Controllers', function() {
-		beforeEach(inject(function(_$controller_) {
-			$controller = _$controller_;
+
+		var deferred, TodoService, $rootScope, $scope;
+		beforeEach(inject(function($controller, _$rootScope_, _$q_) {
+			deferred = _$q_.defer();
+			$rootScope = _$rootScope_;
+			$scope = _$rootScope_.$new();
+			TodoService = {list: function(){}};
+			spyOn(TodoService, 'list').and.returnValue(deferred.promise);
+			$controller('listCtrl', {
+				$scope: $scope,
+				TodoService: TodoService
+			})
 		}));
 
-		describe('list', function() {
-			it('should have list of 3 todos', function() {
-				var $scope = {};
-				var ctrl = $controller('listCtrl', {$scope: $scope});
-				expect($scope.todos.length).toBe(4);
+		describe('list view', function() {
+			fit('should have list of 3 todos', function() {
+				deferred.resolve([
+					{id: new Date().getTime(), text: 'buy milk', done: false},
+					{id: new Date().getTime(), text: 'pick up kids', done: false},
+					{id: new Date().getTime(), text: 'finish book', done: false}
+				]);
+				$scope.$apply();
+				expect($scope.todos.length).toBe(3);
 			}); 
 		});
 

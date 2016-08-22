@@ -3,12 +3,10 @@
 angular.module('TodoApp', [])
 
 	.controller('listCtrl', function($scope, TodoService) {
-		$scope.todos = [
-			'buy milk',
-			'pickup kids',
-			'read book',
-			'another'
-		]
+		TodoService.list()
+			.then(function(todos) {
+				$scope.todos = todos;
+		});
 	})
 	
 	.factory('Utils', function() {
