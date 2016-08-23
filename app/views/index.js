@@ -6,11 +6,11 @@ angular.module('TodoApp')
 	.config(function($routeProvider) {
 		$routeProvider
 			.when('/todos', {
-				templateUrl: './list.html',
+				templateUrl: './views/todo-list.template.html',
 				controller: 'listCtrl'
 			})
 			.when('/todos/:id', {
-				templateUrl: './edit.html',
+				templateUrl: './views/todo-edit.template.html',
 				controller: 'editCtrl'
 			});
 	})
