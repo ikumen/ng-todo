@@ -1,5 +1,8 @@
 'use strict';
 
+var angular = require('angular');
+require('angular-mocks');
+
 angular.module('TodoAppTest', [])
 	.factory('testHelper', function($q) {
 		var deferred = $q.defer();

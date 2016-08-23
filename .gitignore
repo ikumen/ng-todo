@@ -4,6 +4,7 @@ node_modules
 *.swp
 *.un~
 bundle.js
+*-bundle.js
 
 app/ngmin
 app/ngAnnotate
