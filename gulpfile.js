@@ -40,8 +40,8 @@ gulp.task('unit', ['browserify-tests'], function(done) {
 });
 
 gulp.task('watch', function() {
-	var files = glob.sync('test/unit/**/*.js')
-		.concat(['!app/bundle.js','!test/test-bundle.js', 'app/app.js']);
+	var files = ['!app/bundle.js','!test/test-bundle.js', 'app/**/*.js']
+		.concat(glob.sync('test/unit/**/*.js'));
 	gulp.watch(files, ['browserify', 'unit'])
 });
 

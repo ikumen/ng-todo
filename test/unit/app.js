@@ -113,6 +113,7 @@ describe('Todo Application', function() {
 			});
 
 			it('should have new Todo for creating', function() {
+				$routeParams.id = 'new';
 				$controller('editCtrl', {
 					$scope: $scope,
 					TodoService: TodoService
