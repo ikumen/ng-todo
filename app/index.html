@@ -2,16 +2,12 @@
 <html>
 <head>
 	<title>Todo</title>
-	<script type="text/javascript" src="bundle.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular-route.js"></script>
+	<script type="text/javascript" src="app.js"></script>
 
 </head>
 <body ng-app="TodoApp">
-	<div ng-controller="listCtrl">
-		<ul>
-			<li ng-repeat="todo in todos">
-				{{todo}}
-			</li>
-		</ul>
-	</div>
+	<div ng-view></div>
 </body>
 </html>

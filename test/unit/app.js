@@ -1,39 +1,145 @@
 'use strict';
 
 angular.module('TodoAppTest', [])
-	.factory('testHelper', function() {
+	.factory('testHelper', function($q) {
+		var deferred = $q.defer();
 
+		function setUpSpyOn(obj, fnName, fnOrData, isReject) {
+			var doResolveOrReject = isReject ? deferred.reject : deferred.resolve;
+			if(typeof fnOrData === 'function') {
+				// allows dynamically adding a function to spy on
+				obj[fnName] = fnOrData;
+			}
+
+			spyOn(obj, fnName).and.callFake(
+				function() {
+					if(typeof fnOrData === 'function') {
+						doResolveOrReject(fnOrData.apply(null, arguments));
+					} else {
+						doResolveOrReject(fnOrData.apply(null, arguments));
+					}
+					return deferred.promise;
+				});
+
+			return obj;
+		}
+
+		return {
+			spyOnAndResolveFn: function(obj, fnName, fnOrData) {
+				return setUpSpyOn(obj, fnName, fnOrData, false);
+			},
+			spyOnAndRejectFn: function(obj, fnName, fnOrData) {
+				return setUpSpyOn(obj, fnName, fnOrData, true);
+			},
+			spyOnAndResolveData: function(obj, fnName, fnOrData) {
+				return setUpSpyOn(obj, fnName, fnOrData, false);
+			},
+			spyOnAndRejectData:function(obj, fnName, fnOrData) {
+				return setUpSpyOn(obj, fnName, fnOrData, true);
+			}
+		}
 });
 
 describe('Todo Application', function() {
 
-	beforeEach(module('TodoApp'));
+	beforeEach(angular.mock.module('TodoApp'));
+	beforeEach(angular.mock.module('TodoAppTest'));
 	
 	describe('Controllers', function() {
 
-		var deferred, TodoService, $rootScope, $scope;
-		beforeEach(inject(function($controller, _$rootScope_, _$q_) {
-			deferred = _$q_.defer();
-			$rootScope = _$rootScope_;
-			$scope = _$rootScope_.$new();
-			TodoService = {list: function(){}};
-			spyOn(TodoService, 'list').and.returnValue(deferred.promise);
-			$controller('listCtrl', {
-				$scope: $scope,
-				TodoService: TodoService
+		var $controller, 
+			$rootScope, 
+			$scope, 
+			$routeParams,
+			$location,
+			testHelper, 
+			TodoService;
+
+		beforeEach(
+			angular.mock.inject(
+				function(_$controller_, _$rootScope_, _$routeParams_, _$location_, _testHelper_, _TodoService_) {
+					$location = _$location_;
+					$rootScope = _$rootScope_;
+					$scope = _$rootScope_.$new();
+					$routeParams = _$routeParams_;
+					testHelper = _testHelper_;
+					TodoService = _TodoService_;
+					$controller = _$controller_;
 			})
-		}));
+		);	
+
 
 		describe('list view', function() {
-			fit('should have list of 3 todos', function() {
-				deferred.resolve([
-					{id: new Date().getTime(), text: 'buy milk', done: false},
-					{id: new Date().getTime(), text: 'pick up kids', done: false},
-					{id: new Date().getTime(), text: 'finish book', done: false}
-				]);
+			it('should have list of 3 todos', function() {
+				$controller('listCtrl', {
+					$scope: $scope,
+					TodoService: testHelper.spyOnAndResolveFn({}, 'list', function() {
+							return [
+								{id: new Date().getTime(), text: 'buy milk', done: false},
+								{id: new Date().getTime(), text: 'pick up kids', done: false},
+								{id: new Date().getTime(), text: 'finish book', done: false}
+							];
+					})
+				});
 				$scope.$apply();
 				expect($scope.todos.length).toBe(3);
 			}); 
+		});
+
+		describe('edit view', function() {
+
+			var existingTodo = {id: 1, text: 'buy milk', done: false};
+			beforeEach(function() {
+				// supply a mocked and spyied on version of get
+				testHelper.spyOnAndResolveFn(TodoService, 'get', 
+					function(id) { 
+						return existingTodo; 
+				});
+			});
+
+			it('should have Todo for editing', function() {
+				$routeParams.id = existingTodo.id;
+				$controller('editCtrl', {
+					$scope: $scope,
+					TodoService: TodoService
+				});
+
+				$scope.$apply();
+				expect(TodoService.get).toHaveBeenCalled();
+				expect($scope.todo).toEqual(existingTodo);
+			});
+
+			it('should have new Todo for creating', function() {
+				$controller('editCtrl', {
+					$scope: $scope,
+					TodoService: TodoService
+				})
+				expect(TodoService.get).not.toHaveBeenCalled();
+				expect($scope.todo).toEqual({text: null, done: false});
+			});
+
+			it('should handle a Todo update', function() {
+				$routeParams.id = existingTodo.id;
+				spyOn($location, 'path');
+				testHelper.spyOnAndResolveFn(TodoService, 'update',
+					function(todo) {
+						return todo;
+				});
+				$controller('editCtrl', {
+					$scope: $scope,
+					TodoService: TodoService
+				});
+
+				$scope.$apply();
+				expect(TodoService.get).toHaveBeenCalled();
+				$scope.todo.text = 'Take out the trash';
+
+				$scope.save();
+				$scope.$apply();
+				expect(TodoService.update).toHaveBeenCalledWith($scope.todo);
+				expect($location.path).toHaveBeenCalledWith('/todos');
+			})
+
 		});
 
 	});

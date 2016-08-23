@@ -1,12 +1,63 @@
 'use strict';
 
-angular.module('TodoApp', [])
 
-	.controller('listCtrl', function($scope, TodoService) {
+angular.module('TodoApp', ['ngRoute'])
+	.config(function($routeProvider) {
+		$routeProvider
+		.when('/todos', {
+			templateUrl: './list.html',
+			controller: 'listCtrl'
+		})
+		.when('/todos/:id', {
+			templateUrl: './edit.html',
+			controller: 'editCtrl'
+		})
+		.otherwise({
+			redirectTo: '/todos'
+		})
+	})
+
+	.controller('listCtrl', function($scope, $location, TodoService) {
 		TodoService.list()
 			.then(function(todos) {
 				$scope.todos = todos;
 		});
+
+		$scope.edit = function(id) {
+			$location.path('/todos/' + id);
+		}
+	})
+
+	.controller('editCtrl', function($scope, $routeParams, $location, TodoService) {
+		$scope.todo = {
+			text: null,
+			done: false
+		};
+
+		if($routeParams.id) {
+			TodoService.get(parseInt($routeParams.id))
+				.then(function(_todo_) {
+					$scope.todo = {
+						id: _todo_.id,
+						text: _todo_.text,
+						done: _todo_.done
+					};
+			});
+		}
+
+		function createOrUpdateSuccess() {
+			$location.path('/todos');
+		}
+
+		$scope.save = function() {
+			if($scope.todo.id !== undefined) {
+				TodoService.update($scope.todo)
+					.then(createOrUpdateSuccess);
+			} else {
+				TodoService.create($scope.todo)
+					.then(createOrUpdateSuccess);
+			}
+		}
 	})
 	
 	.factory('Utils', function() {
