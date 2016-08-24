@@ -1,7 +1,13 @@
 'use strict';
 
 module.exports = function($q, Utils) {
-	var _store = [];
+	var _seq = 1;
+	var _store = [
+		{id: _generateId(), text: 'Buy milk', done: false},
+		{id: _generateId(), text: 'Take out the paper and the trash', done: true},
+		{id: _generateId(), text: 'Finish book', done: false},
+		{id: _generateId(), text: 'Pick up kids', done: false}
+	];
 
 	function resolve(o) {
 		var deferred = $q.defer();
@@ -16,7 +22,7 @@ module.exports = function($q, Utils) {
 	}
 
 	function _generateId() {
-		return new Date().getTime();
+		return _seq++;
 	}
 
 	function _getIndex(id) {

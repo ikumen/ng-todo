@@ -1,7 +1,9 @@
+<h2 class="heading">Todos</h2>
 		<a href="/#/todos/new">add</a>
 		<ul>
 			<li ng-repeat="todo in todos">
 				<input type="checkbox" ng-checked="todo.done">
 				<span ng-click="edit(todo.id)">{{todo.text}}</span>
+				<a href="#/todos/{{todo.id}}">{{todo.text}}</a>
 			</li>
 		</ul>

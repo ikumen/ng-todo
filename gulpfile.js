@@ -59,6 +59,11 @@ gulp.task('unit', ['browserify-tests'], function(done) {
 		}, done).start();
 });
 
+gulp.task('watch-e2e', function() {
+	var files = globPatterns(['test/e2e/**/*.js']);
+	gulp.watch(files, ['e2e'])
+});
+
 gulp.task('e2e', function() {
 	return gulp
 		.src('test/e2e/**/*.js')
@@ -74,7 +79,7 @@ gulp.task('watch', function() {
 	var files = globPatterns(['app/**/*.js', 'test/unit/**/*.js'],
 		['app/bundle.js', 'test/unit/test-bundle.js']);
 
-	gulp.watch(files, ['browserify', 'unit'])
+	gulp.watch(files, ['browserify', 'unit', 'e2e'])
 });
 
 gulp.task('default', ['browserify', 'unit', 'watch'], function() {
