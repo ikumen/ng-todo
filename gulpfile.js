@@ -4,6 +4,7 @@ var gulp = require('gulp'),
 	browserify = require('browserify'),
 	source = require('vinyl-source-stream'),
 	karmaServer = require('karma').Server,
+	protractor = require('gulp-protractor').protractor,
 	glob = require('glob'),
 
 	connect = require('gulp-connect');
@@ -24,12 +25,31 @@ gulp.task('browserify', function() {
 		.pipe(connect.reload());
 });
 
+function globPatterns(patterns, excludes) {
+	var files = [], ignores = {};
+	// create has of excludes for easier lookup
+	[].concat(excludes).forEach(function(ex) {
+		ignores[ex] = true;
+	});
+	// glob each pattern, then filter through excludes
+	[].concat(patterns).forEach(function(pattern) {
+			glob.sync(pattern).forEach(function(file) {
+				if(!ignores[file]) {
+					files.push(file);
+				}
+			});
+	});
+	return files;
+}
+
 gulp.task('browserify-tests', function() {
-	var files = glob.sync('test/unit/**/*.js');
+	var files = globPatterns(['app/**/*.js', 'test/unit/**/*.js'],
+		['app/bundle.js', 'test/unit/test-bundle.js']);
+
 	return browserify({entries: files, debug: true})
 		.bundle()
 		.pipe(source('test-bundle.js'))
-		.pipe(gulp.dest('test'));
+		.pipe(gulp.dest('test/unit'));
 });
 
 gulp.task('unit', ['browserify-tests'], function(done) {
@@ -39,21 +59,25 @@ gulp.task('unit', ['browserify-tests'], function(done) {
 		}, done).start();
 });
 
+gulp.task('e2e', function() {
+	return gulp
+		.src('test/e2e/**/*.js')
+		.pipe(protractor({
+				configFile: __dirname + '/protractor.conf.js',
+				args: ['--baseUrl', 'http://localhost:8080']
+			}
+		))
+		.on('error', function(e) { throw e; });
+});
+
 gulp.task('watch', function() {
-	var files = glob.sync('test/unit/**/*.js')
-		.concat([
-			'!app/bundle.js',
-			'!test/test-bundle.js',
-			'app/views/**/*.js',
-			'app/components/**/*.js',
-			'app/services/**/*.js',
-			'app/app.js'
-		]);
+	var files = globPatterns(['app/**/*.js', 'test/unit/**/*.js'],
+		['app/bundle.js', 'test/unit/test-bundle.js']);
 
 	gulp.watch(files, ['browserify', 'unit'])
 });
 
-gulp.task('default', ['watch'], function() {
+gulp.task('default', ['browserify', 'unit', 'watch'], function() {
 	gulp.start('connect');
 });
 
