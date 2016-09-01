@@ -7,9 +7,20 @@
 	<script src="/lib/angular-route/angular-route.min.js"></script>
 	<script src="/app.js"></script>
 	<script src="/services/todo-service.js"></script>
-	<script src="/components/todos/todos.directive.js"></script>
+	<script src="/components/todo-list.directive.js"></script>
+	<script src="/components/done-toggle.directive.js"></script>
+	<script src="/components/todo-edit.directive.js"></script>
+	<style>
+		.done {
+			color: green;
+		}
+
+	</style>
 </head>
 <body ng-app="Yata">
-	<todos/>
+	<div ng-controller="todoListCtrl"> 
+		<todo-list todos="todos"></todo-list>
+		<todo-edit todo="todo"></todo-edit>
+	</div>
 </body>
 </html>

@@ -22,6 +22,7 @@ angular.module('Yata')
 
 	var api = {
 		save: function(todo) {
+			console.log('saving:', todo)
 			if(todo && todo.id) {
 				return api._update(todo);
 			} else {
@@ -54,6 +55,7 @@ angular.module('Yata')
 			if(todo && todo.id && (index = _getIndex(todo.id)) >= 0) {
 				_store[index].text = todo.text || _store[index].text;
 				_store[index].done = todo.done !== undefined ? todo.done : _store[index].done;
+				console.log('_store: ', _store);
 				return todo;
 			}
 			return null;
@@ -65,6 +67,7 @@ angular.module('Yata')
 				done: false
 			};
 			_store.push(todo);
+			console.log('_store: ', _store);
 			return todo;
 		}
 
