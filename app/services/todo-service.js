@@ -1,11 +1,7 @@
 angular.module('Yata')
 .factory('TodoService', function() {
 	var _seq = 1;
-	var _store = [
-		{id: _generateId(), text: 'Buy some milk', done: false},
-		{id: _generateId(), text: 'Take out the trash', done: false},
-		{id: _generateId(), text: 'Finish homework', done: true}
-	];
+	var _store = [];
 
 	function _generateId() {
 		return _seq++;
@@ -22,17 +18,23 @@ angular.module('Yata')
 
 	var api = {
 		save: function(todo) {
-			console.log('saving:', todo)
 			if(todo && todo.id) {
 				return api._update(todo);
 			} else {
 				return api._create(todo);
 			}
 		},
+		saveAll: function(todos) {
+			var savedTodos = [];
+			todos.forEach(function(todo) {
+				savedTodos.push(api.save(todo));
+			});
+			return savedTodos;
+		},
 		list: function() {
-			var todos = [];
-			angular.copy(_store, todos);
-			return todos;
+			//var todos = [];
+			//angular.copy(_store, todos);
+			return _store;
 		},
 		get: function(id) {
 			var index;
@@ -50,12 +52,19 @@ angular.module('Yata')
 			}
 			return null;
 		},
+		deleteAll: function(ids) {
+			var deletedIds = [];
+			ids.forEach(function(id) {
+				deletedIds.push(api.delete(id));
+			});
+			return deletedIds;
+		},
 		_update: function(todo) {
 			var index;
 			if(todo && todo.id && (index = _getIndex(todo.id)) >= 0) {
 				_store[index].text = todo.text || _store[index].text;
 				_store[index].done = todo.done !== undefined ? todo.done : _store[index].done;
-				console.log('_store: ', _store);
+				//console.log('_store: ', _store);
 				return todo;
 			}
 			return null;
@@ -67,7 +76,7 @@ angular.module('Yata')
 				done: false
 			};
 			_store.push(todo);
-			console.log('_store: ', _store);
+			//console.log('_store: ', _store);
 			return todo;
 		}
 

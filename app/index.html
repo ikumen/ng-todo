@@ -8,8 +8,9 @@
 	<script src="/app.js"></script>
 	<script src="/services/todo-service.js"></script>
 	<script src="/components/todo-list.directive.js"></script>
+	<script src="/components/todo-list-item.directive.js"></script>
+	<script src="/components/todo-create-form.directive.js"></script>
 	<script src="/components/done-toggle.directive.js"></script>
-	<script src="/components/todo-edit.directive.js"></script>
 	<style>
 		.done {
 			color: green;
@@ -18,9 +19,7 @@
 	</style>
 </head>
 <body ng-app="Yata">
-	<div ng-controller="todoListCtrl"> 
-		<todo-list todos="todos"></todo-list>
-		<todo-edit todo="todo"></todo-edit>
-	</div>
+	<todo-create-form></todo-create-form>
+	<todo-list></todo-list>
 </body>
 </html>

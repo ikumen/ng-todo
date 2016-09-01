@@ -5,28 +5,25 @@ angular.module('Yata')
 		restrict: 'A',
 		scope: {
 			//use the directive attribute name itself
-			target: '=doneToggle'
-		},
-		controller: function($scope) {
-			console.log('done toggle ctrl')
-			$scope.toggle = function() {
-
-			}
+			todo: '=doneToggle'
 		},
 		link: function(scope, element, attrs) {
-			var status = true;
-			console.log('help')
 			element.on('click', function() {
-				if(status) {
+				scope.todo = TodoService.save({
+					id: scope.todo.id,
+					done: !scope.todo.done
+				})
+
+
+
+				if(scope.todo.done) {
 					element.addClass('done');
 				} else {
 					element.removeClass('done');
 				}
-				status = !status;
-				console.log(scope.target)
+
 			});
 		},
-		//templateUrl: '/components/done-toggle.template.html'
 	}
 
 });

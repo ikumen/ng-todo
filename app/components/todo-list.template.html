@@ -1,5 +1,5 @@
 <ul>
-	<li ng-repeat="todo in todos" done-toggle="todo">
-		{{todo.text}}
+	<li ng-repeat="t in todos">
+		<todo-list-item todo="t"></todo-list-item>
 	</li>
 </ul>

@@ -9,6 +9,13 @@ describe('Yata, TodoService', function() {
 	beforeEach(inject(function(_$rootScope_, _TodoService_) {
 		$rootScope = _$rootScope_;
 		TodoService = _TodoService_;
+
+		TodoService.saveAll([
+			{text: 'Buy some milk', done: false},
+			{text: 'Take out the trash', done: false},
+			{text: 'Finish homework', done: false}
+		]);
+
 	}));
 
 	describe('save(todo)', function() {
@@ -66,27 +73,21 @@ describe('Yata, TodoService', function() {
 
 	describe('delete(id)', function() {
 
-		var todos = [];
-
-		beforeEach(function() {
-			todos = TodoService.list();
-		})
-
 		it('should delete a todo, when given a todo id', function() {
-			var todo1 = todos[1];
-			expect(todos.length).toBe(3);
+			var todosLength = TodoService.list().length;
+			expect(todosLength).toBe(3);
+			var todo1 = TodoService.list()[1]; // we know we've got 3 todos
 			expect(TodoService.get(todo1.id)).toEqual(todo1);
 
 			TodoService.delete(todo1.id);
-			expect(TodoService.list().length).toBe(todos.length-1);
+			expect(TodoService.list().length).toBe(todosLength-1);
 			expect(TodoService.get(todo1.id)).toBeNull();
 		});
 
 		it('should not delete anything, when given a non-existent id', function() {
-			expect(todos.length).toBe(3);
+			expect(TodoService.list().length).toBe(3);
 			TodoService.delete(1000);
-
-			expect(todos.length).toBe(3);
+			expect(TodoService.list().length).toBe(3);
 		});
 	});
 });

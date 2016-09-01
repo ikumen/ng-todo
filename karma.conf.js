@@ -25,7 +25,7 @@ module.exports = function(config) {
         // 'app/components/**/*.js',
         // 'test/unit/helper.js',
         // 'test/unit/**/*.js'
-        'app/**/*.html'        
+        'app/components/**/*.html'        
     ],
 
 
@@ -66,7 +66,9 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    //browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
+
 
 
     // Continuous Integration mode

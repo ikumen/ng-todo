@@ -2,29 +2,28 @@ describe('Yata, todos directive', function() {
 
 	var elm,
 		scope,
-		todos;
+		TodoService;
 
 	beforeEach(module('Yata'));
-	beforeEach(module('/components/todo-list.template.html'));
+	beforeEach(module('/components/todo-list.template.html', '/components/todo-list-item.template.html'));
 
-	beforeEach(inject(function($rootScope, $compile) {
-
-		todos = [
-			{id: 1, text: 'Buy some milk', done: false},
-			{id: 2, text: 'Take out the trash', done: false},
-		];
+	beforeEach(inject(function($rootScope, $compile, _TodoService_) {
 
 		elm = angular.element(
-			'<todo-list todos="todos"></todo-list>');
+			'<todo-list></todo-list>');
 
+		TodoService = _TodoService_;
 		scope = $rootScope;
 		$compile(elm)(scope);		
-		scope.$digest();
 	}));
 
 	it('should display a list of todos', function() {
 		scope.$apply(function() {
-			scope.todos = todos;
+			spyOn(TodoService, 'list').and
+				.returnValue([
+					{id: 1, text: 'Buy some milk', done: false},
+					{id: 2, text: 'Take out the trash', done: false},
+				]);			
 		});
 		var lis = elm.find('li');
 		expect(lis.length).toBe(2);

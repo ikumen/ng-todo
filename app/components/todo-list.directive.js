@@ -1,19 +1,12 @@
 angular.module('Yata')
-.controller('todoListCtrl', function($scope, TodoService) {
-	function newTodo() {
-		return {
-			text: 'hello',
-			done: false
-		};
-	}
-	$scope.todo = newTodo();
-	$scope.todos = TodoService.list();
-})
-.directive('todoList', function() {
+.directive('todoList', function(TodoService) {
 	return {
+		restrict: 'E',
+		transclude: true,
 		replace: true,
-		scope: {
-			todos: '='
+		scope: {},
+		controller: function($scope) {
+			$scope.todos = TodoService.list();
 		},
 		templateUrl: '/components/todo-list.template.html'
 	}
