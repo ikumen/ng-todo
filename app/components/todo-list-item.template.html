@@ -1,4 +1,4 @@
-<div>
+
 	<div ng-hide="isEdit">
 		<span ng-click="showEdit()">{{_todo_.text}}</span>
 		<span done-toggle="_todo_">done</span>
@@ -8,5 +8,6 @@
 		<button ng-click="save(_todo_)">
 			{{_todo_.id ? 'Done' : 'Create'}}
 		</button>
+		<button ng-click="delete(_todo_)">Delete</button>
 	</form>	
-</div>
+

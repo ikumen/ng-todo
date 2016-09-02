@@ -9,11 +9,12 @@ angular.module('Yata')
 		},
 		link: function(scope, element, attrs) {
 			element.on('click', function() {
-				scope.todo = TodoService.save({
+				var updated = TodoService.save({
 					id: scope.todo.id,
 					done: !scope.todo.done
 				})
 
+				scope.todo.done = updated.done;
 
 
 				if(scope.todo.done) {

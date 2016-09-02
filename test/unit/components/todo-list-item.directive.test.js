@@ -1,5 +1,6 @@
 describe('Yata, todo-list-item directive', function() {
 	var elm,
+		todo,
 		scope,
 		controller,
 		TodoService;
@@ -10,64 +11,102 @@ describe('Yata, todo-list-item directive', function() {
 	beforeEach(inject(function($rootScope, $compile, _TodoService_) {
 
 		elm = angular.element(
-			'<todo-list-item todo="todo"></todo-list-item>');
+			'<ul>' + 
+				'<li ng-repeat="todo in todos" todo-list-item="todo"></li>' +
+			'</ul>'
+		);
 
 		TodoService = _TodoService_;
-		spyOn(TodoService, 'save').and.callFake(function(todo) {
-			return todo;
-		})
 
 		scope = $rootScope.$new();
-		scope.todo = {
+		todo = {
 			id: 1,
 			text: 'Take out the paper and the trash',
 			done: true
-		}
-		$compile(elm)(scope);
+		};
+		scope.todos = [todo];
+		var e = $compile(elm)(scope);
 		scope.$digest();
 	}));
 
-	function assertFormHidden() {
-		// todo list item showing
-		expect(elm.find('span').eq(0).text()).toBe(scope.todo.text);
-		// form should be hidden
-		expect(elm.find('form').hasClass('ng-hide')).toBe(true);
+	function find(elm, path) {
+		var parts = path.split(/\s+/);
+		var _elm_ = elm;
+		parts.forEach(function(part) {
+			var n = parseInt(part);
+			if(isNaN(n)) {
+				_elm_ = _elm_.find(part);
+			} else {
+				_elm_ = _elm_.eq(n);
+			}
+		});
+		return _elm_;
 	}
 
-	it('should show todo item', function() {
+	function assertFormHidden() {
+		// todo list item showing		
+		expect(find(elm, 'li div 0').hasClass('ng-hide')).toBe(false);
+		expect(find(elm, 'li span 0').text()).toEqual(todo.text);
+		// form should be hidden
+		expect(find(elm, 'form').hasClass('ng-hide')).toBe(true);
+	}
+
+	fit('should show todo item', function() {
 		assertFormHidden();
 	});
 
-	it('should show form', function() {
+	fit('should show form', function() {
 		assertFormHidden();
 
 		// click on todo item to edit
-		elm.find('span').eq(0).triggerHandler('click')
+		find(elm, 'li span 0').triggerHandler('click')
 		// todo list item is hidden
-		expect(elm.find('div').eq(1).hasClass('ng-hide')).toBe(true);
+		expect(find(elm, 'li div 0').hasClass('ng-hide')).toBe(true);
 		// form is showing
-		expect(elm.find('form').hasClass('ng-hide')).toBe(false);	
+		expect(find(elm, 'form').hasClass('ng-hide')).toBe(false);	
 	});
 
-	it('should save todo on form submit', function() {
+	fit('should save todo on form submit', function() {
+		spyOn(TodoService, 'save').and.callFake(function(todo) {
+			return todo;
+		});
+
 		assertFormHidden();
 
 		// click on todo item to edit
-		elm.find('span').eq(0).triggerHandler('click')
+		find(elm, 'li span 0').triggerHandler('click')
 
 		var newText = 'Finish homework';
 		scope.$apply(function() {
-			elm.isolateScope()._todo_.text = newText;	
+			find(elm, 'li 0').isolateScope()._todo_.text = newText;	
 		});
 
-		elm.find('button').eq(0).triggerHandler('click');
+		find(elm, 'li button 0').triggerHandler('click');
 		expect(TodoService.save).toHaveBeenCalledWith({
-			id: scope.todo.id,
+			id: todo.id,
 			text: newText,
-			done: scope.todo.done
+			done: todo.done
 		});
 		expect(elm.find('textarea').val()).toBe(newText);
 	})
+
+	fit('should delete the todo', function() {
+		spyOn(TodoService, 'delete').and.callFake(function(id) {
+			return id;
+		});
+
+		//spyOn(elm, '$remove');
+		
+		var idToDelete = todo.id;
+
+		// delete button should be defined
+		expect(find(elm, 'button 1').text()).toBe('Delete');
+		// delete the todo
+		find(elm, 'button 1').triggerHandler('click');
+
+		expect(TodoService.delete).toHaveBeenCalledWith(idToDelete);
+		expect(find(elm, 'li').length).toBe(0);
+	});
 
 });
 
