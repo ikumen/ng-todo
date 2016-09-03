@@ -51,11 +51,11 @@ describe('Yata, todo-list-item directive', function() {
 		expect(find(elm, 'form').hasClass('ng-hide')).toBe(true);
 	}
 
-	fit('should show todo item', function() {
+	it('should show todo item', function() {
 		assertFormHidden();
 	});
 
-	fit('should show form', function() {
+	it('should show form', function() {
 		assertFormHidden();
 
 		// click on todo item to edit
@@ -66,7 +66,7 @@ describe('Yata, todo-list-item directive', function() {
 		expect(find(elm, 'form').hasClass('ng-hide')).toBe(false);	
 	});
 
-	fit('should save todo on form submit', function() {
+	it('should save todo on form submit', function() {
 		spyOn(TodoService, 'save').and.callFake(function(todo) {
 			return todo;
 		});
@@ -90,7 +90,7 @@ describe('Yata, todo-list-item directive', function() {
 		expect(elm.find('textarea').val()).toBe(newText);
 	})
 
-	fit('should delete the todo', function() {
+	it('should delete the todo', function() {
 		spyOn(TodoService, 'delete').and.callFake(function(id) {
 			return id;
 		});
