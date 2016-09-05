@@ -2,7 +2,14 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>YATA: Yet Another Todo App</title>
+  <link rel="stylesheet" href="/lib/material-design-lite/material.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body ng-app="Yata">
+	<div ng-view class="app-container"></div>
 	<script src="/lib/angular/angular.min.js"></script>
 	<script src="/lib/angular-route/angular-route.min.js"></script>
 	<script src="/app.js"></script>
@@ -11,15 +18,25 @@
 	<script src="/components/todo-list-item.directive.js"></script>
 	<script src="/components/todo-create-form.directive.js"></script>
 	<script src="/components/done-toggle.directive.js"></script>
-	<style>
-		.done {
-			color: green;
-		}
+	<script src="/components/app-layout.directive.js"></script>
+	<script src="/views/todos.controller.js"></script>
+	<script src="/views/todo-edit.controller.js"></script>
+	<script src="/components/todo-edit-form.directive.js"></script>
+	<script src="/lib/material-design-lite/material.min.js"></script>
+	<script type="text/javascript">
+		angular.module('Yata')
+		.directive('fixMdlRender', function() {
+			return {
+				restrict: 'A',
+				link: function(scope, el) {
+					el.ready(function() {
+						componentHandler.upgradeElement(el[0]);
+					});
+				}
+			}
+		});
 
-	</style>
-</head>
-<body ng-app="Yata">
-	<todo-create-form></todo-create-form>
-	<todo-list></todo-list>
+	</script>
 </body>
 </html>
+

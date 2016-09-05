@@ -1,0 +1,20 @@
+			<form ng-submit="save()">
+	      <div class="mdl-textfield mdl-js-textfield" fix-mdl-render
+	      		ng-class="{'is-invalid': hasErrors()}">
+	        <textarea class="mdl-textfield__input" fix-mdl-render
+	        		type="text" rows= "4" id="todo_textfield"
+	        		ng-model="_todo_.text">      		
+      		</textarea>
+	        <label class="mdl-textfield__label" fix-mdl-render
+	        		for="todo_textfield">
+	        	Don't forget the milk...
+	        </label>
+	        <span class="mdl-textfield__error">Nothing to save</span>
+	      </div>
+	      <div style="text-align: right;">
+				<button type="submit" class="mdl-button mdl-js-button mdl-button--accent mdl-js-ripple-effect" 
+				 fix-mdl-render>
+					Save
+				</button>
+				</div>
+	    </form>

@@ -1,0 +1,25 @@
+<app-layout>
+	<app-layout-header>
+    <div class="mdl-layout__header-row">
+	    <!-- Title -->
+  	  <span class="mdl-layout-title">Yata</span>
+    	<!-- Add spacer, to align navigation to the right -->
+    	<div class="mdl-layout-spacer"></div>
+    	<!-- Navigation. We hide it in small screens. -->
+    </div>
+  </app-layout-header>
+	<app-layout-body>
+	  <div class="yata-list">
+	    <div class="yata-list__item" ng-repeat="todo in todos"
+	    		todo-list-item="todo">
+	    </div>
+	  </div>
+	  <a href="#/todos/new" type="button" fix-mdl-render
+	      class="mdl-button mdl-js-button mdl-js-ripple-effect
+	      	mdl-button--fab mdl-button--mini-fab 
+	      	mdl-button--colored	yata-button__add"
+	      aria-label="add new Todo">
+	    <i class="material-icons">add</i>
+	  </button>
+	</app-layout-body>
+</app-layout>

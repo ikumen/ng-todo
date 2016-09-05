@@ -1,7 +1,10 @@
 angular.module('Yata')
 .factory('TodoService', function() {
 	var _seq = 1;
-	var _store = [];
+	var _store = [
+		{id: _generateId(), text: 'Buy milk', done: false},
+		{id: _generateId(), text: 'Take out the paper and the trash', done: false}
+	];
 
 	function _generateId() {
 		return _seq++;

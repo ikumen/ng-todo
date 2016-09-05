@@ -15,13 +15,7 @@ angular.module('Yata')
 				})
 
 				scope.todo.done = updated.done;
-
-
-				if(scope.todo.done) {
-					element.addClass('done');
-				} else {
-					element.removeClass('done');
-				}
+				scope.$apply();
 
 			});
 		},

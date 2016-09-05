@@ -1,0 +1,36 @@
+<app-layout>
+	<app-layout-header fix-mdl-render>
+    <div class="mdl-layout__header-row yata-sub-header">
+      <a href="/#/todos" aria-expanded="false" role="button" 
+          tabindex="0" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect yata-button__dark">
+        <i class="material-icons">close</i>
+      </a>  
+	    <!-- Title -->
+  	  <span class="mdl-layout-title"></span>
+    	<!-- Add spacer, to align navigation to the right -->
+    	<div class="mdl-layout-spacer"></div>
+    	<!-- Navigation. We hide it in small screens. -->
+    	<span ng-if="todo.id">
+	      <button aria-expanded="false" role="button" fix-mdl-render 
+	          tabindex="0" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect yata-button__dark"
+	          ng-click="delete(todo)">
+	        <i class="material-icons">delete</i>
+	      </button>  
+	      <button aria-expanded="false" role="button" fix-mdl-render 
+	          tabindex="0" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect yata-button__dark"
+	          ng-class="{'yata-done__active': todo.done}"
+	          done-toggle="todo">
+	        <i class="material-icons">done</i>
+	      </button>  
+      </span>
+    </div>
+	</app-layout-header>
+	<app-layout-body>
+	  <div class="yata-item-form">
+	  	<todo-edit-form
+				todo="todo"
+				finish="finish()"
+	  	></todo-edit-form>
+		</div>
+	</app-layout-body>
+</app-layout>
