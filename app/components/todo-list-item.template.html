@@ -3,10 +3,5 @@
 	        <a href="#/todos/{{todo.id}}">{{todo.text}}</a>
 	      </div>
 	      <div class="yata-list__item_status">
-	          <button class="mdl-button mdl-js-button mdl-button--icon
-	              mdl-js-ripple-effect yata-button__dark" 
-	              ng-class="{'yata-done__active': todo.done}"
-	              done-toggle="todo" fix-mdl-render>
-	            <i class="material-icons">done</i>
-	          </button>        
+	      	<yata-done-button todo="todo"></yata-done-button>
 	      </div>

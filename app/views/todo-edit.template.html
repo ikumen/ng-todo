@@ -16,12 +16,7 @@
 	          ng-click="delete(todo)">
 	        <i class="material-icons">delete</i>
 	      </button>  
-	      <button aria-expanded="false" role="button" fix-mdl-render 
-	          tabindex="0" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect yata-button__dark"
-	          ng-class="{'yata-done__active': todo.done}"
-	          done-toggle="todo">
-	        <i class="material-icons">done</i>
-	      </button>  
+	      <yata-done-button todo="todo"></yata-done-button>
       </span>
     </div>
 	</app-layout-header>
