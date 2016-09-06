@@ -1,7 +1,7 @@
 angular.module('YataTestHelper', [])
-.factory('elmUtils', function() {
+.factory('testHelper', function() {
 	return {
-		find: function(elm, path) {
+		elFind: function(elm, path) {
 			var parts = [];
 			if(path && path.trim().length > 0)
 				parts = (path || '').split(/\s+/);
@@ -16,6 +16,7 @@ angular.module('YataTestHelper', [])
 				}
 			});
 			return _elm_;
-		}
-	}
+		},
+		noOp: function() {},
+	};
 });

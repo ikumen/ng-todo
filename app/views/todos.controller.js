@@ -6,6 +6,10 @@ angular.module('Yata')
 			controller: 'TodosCtrl'
 		})
 })
-.controller('TodosCtrl', function($scope, TodoService) {
+.controller('TodosCtrl', function($scope, TodoService, $location) {
 	$scope.todos = TodoService.list();
+
+	$scope.addNew = function() {
+		$location.path('/todos/new');
+	}
 })

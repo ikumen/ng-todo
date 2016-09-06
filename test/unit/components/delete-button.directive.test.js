@@ -3,18 +3,18 @@ describe('Yata, delete-button directive', function() {
 	var elm,
 		scope,
 		TodoService,
-		utils;
+		helper;
 
 	beforeEach(module('Yata'));
 	beforeEach(module('YataTestHelper'));
 	beforeEach(module('/components/delete-button.template.html'));
 
-	beforeEach(inject(function($rootScope, $compile, _TodoService_, elmUtils) {
+	beforeEach(inject(function($rootScope, $compile, _TodoService_, testHelper) {
 		elm = angular.element(
 			'<yata-delete-button todo="todo" on-finish="callback()"></yata-delete-button>'
 		);
 
-		utils = elmUtils;
+		helper = testHelper;
 		TodoService = _TodoService_;
 		scope = $rootScope.$new();
 		scope.todo = {
@@ -23,8 +23,7 @@ describe('Yata, delete-button directive', function() {
 			done: false
 		};
 
-		function noOp() {}
-		scope.callback = noOp;
+		scope.callback = helper.noOp;
 		spyOn(scope, 'callback');
 		spyOn(TodoService, 'delete').and.callFake(function(id) {
 			return id;
@@ -35,7 +34,7 @@ describe('Yata, delete-button directive', function() {
 	}));
 
 	function assertExistsToBe(value) {
-		var button = utils.find(elm, 'button');
+		var button = helper.elFind(elm, 'button');
 		expect(button.length === 1).toBe(value);
 	}
 
@@ -52,10 +51,10 @@ describe('Yata, delete-button directive', function() {
 		assertExistsToBe(false);
 	});
 
-	fit('should delete todo and call onFinish', function() {
+	it('should delete todo and call onFinish', function() {
 		assertExistsToBe(true);
 
-		var button = utils.find(elm, 'button');
+		var button = helper.elFind(elm, 'button');
 		button.eq(0).triggerHandler('click');
 
 		expect(TodoService.delete).toHaveBeenCalled();

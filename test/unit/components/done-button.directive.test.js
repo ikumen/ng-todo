@@ -3,18 +3,18 @@ describe('Yata, done-button directive', function() {
 	var elm,
 		scope,
 		TodoService,
-		utils;
+		helper;
 
 	beforeEach(module('Yata'));
 	beforeEach(module('YataTestHelper'));
 	beforeEach(module('/components/done-button.template.html'))
 
-	beforeEach(inject(function($rootScope, $compile, _TodoService_, elmUtils) {
+	beforeEach(inject(function($rootScope, $compile, _TodoService_, testHelper) {
 		elm = angular.element(
 			'<yata-done-button todo="todo"></yata-done-button>'
 		);
 
-		utils = elmUtils;
+		helper = testHelper;
 		scope = $rootScope.$new();
 		scope.todo = {
 			id: 1,
@@ -22,17 +22,20 @@ describe('Yata, done-button directive', function() {
 			done: false
 		};		
 		TodoService = _TodoService_;
+		spyOn(TodoService, 'save').and.callFake(function(todo) {
+			return todo;
+		})
 		$compile(elm)(scope);
 		scope.$digest();
 	}));
 
 	function assertExistsToBe(value) {
-		var button = utils.find(elm, 'button');
+		var button = helper.elFind(elm, 'button');
 		expect(button.length === 1).toBe(value);
 	}
 
 	function assertDoneStatusToBe(status) {
-		var button = utils.find(elm, 'button');
+		var button = helper.elFind(elm, 'button');
 		expect(button.eq(0).hasClass('yata-done__active')).toBe(status);
 	}
 
@@ -64,9 +67,10 @@ describe('Yata, done-button directive', function() {
 		// given a button with done status == false
 		assertDoneStatusToBe(false);
 		// click button to toggle done status to true
-		var button = utils.find(elm, 'button');
+		var button = helper.elFind(elm, 'button');
 		button.eq(0).triggerHandler('click');
 		
 		assertDoneStatusToBe(true);
+		expect(TodoService.save).toHaveBeenCalled();
 	});
 })

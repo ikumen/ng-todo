@@ -1,6 +1,6 @@
 
 	      <div class="yata-list__item_content">
-	        <a href="#/todos/{{todo.id}}">{{todo.text}}</a>
+	        <span ng-click="getTodo(todo.id)">{{todo.text}}</span>
 	      </div>
 	      <div class="yata-list__item_status">
 	      	<yata-done-button todo="todo"></yata-done-button>

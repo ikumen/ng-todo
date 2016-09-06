@@ -4,18 +4,14 @@ angular.module('Yata')
 		restrict: 'E',
 		scope: {
 			todo: '=',
-			finish: '&'
+			onFinish: '&'
 		},
 		controller: function($scope) {
+			$scope.nothingToSave = false;
 			$scope._todo_ = angular.copy($scope.todo);
 
 			function isEmpty() {
 				return $scope._todo_.text.trim().length === 0;
-			}
-
-			function isDirty() {
-				return $scope._todo_.text.trim() !== $scope.todo.text ||
-					$scope._todo_.done !== $scope.todo.done;
 			}
 
 			$scope.hasErrors = function() {
@@ -28,7 +24,7 @@ angular.module('Yata')
 						id: $scope._todo_.id,
 						text: $scope._todo_.text
 					});
-					$scope.finish();
+					$scope.onFinish();
 				} else {
 					$scope.nothingToSave = true;
 				}

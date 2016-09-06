@@ -1,14 +1,16 @@
 describe('Yata, todo-list-item directive', function() {
 	var elm,
-		todo,
+		todo1, todo2,
 		scope,
-		controller,
-		TodoService;
+		TodoService,
+		helper,
+		$location;
 
 	beforeEach(module('Yata'));
-	beforeEach(module('/components/todo-list-item.template.html'));
+	beforeEach(module('YataTestHelper'));
+	beforeEach(module('/components/todo-list-item.template.html', '/components/done-button.template.html'));
 
-	beforeEach(inject(function($rootScope, $compile, _TodoService_) {
+	beforeEach(inject(function($rootScope, $compile, _TodoService_, testHelper, _$location_) {
 
 		elm = angular.element(
 			'<ul>' + 
@@ -17,96 +19,48 @@ describe('Yata, todo-list-item directive', function() {
 		);
 
 		TodoService = _TodoService_;
+		helper = testHelper;
+		$location = _$location_;
+		spyOn($location, 'path');
 
 		scope = $rootScope.$new();
-		todo = {
+		todo1 = {
 			id: 1,
 			text: 'Take out the paper and the trash',
 			done: true
 		};
-		scope.todos = [todo];
+		todo2 = {
+			id: 2,
+			text: 'Buy some milk',
+			done: false
+		};
+		scope.todos = [todo1, todo2];
 		var e = $compile(elm)(scope);
 		scope.$digest();
 	}));
 
-	function find(elm, path) {
-		var parts = path.split(/\s+/);
-		var _elm_ = elm;
-		parts.forEach(function(part) {
-			var n = parseInt(part);
-			if(isNaN(n)) {
-				_elm_ = _elm_.find(part);
-			} else {
-				_elm_ = _elm_.eq(n);
-			}
-		});
-		return _elm_;
+	function assertListIsNotEmpty() {
+		expect(helper.elFind(elm, 'div span').length).toBe(scope.todos.length);
 	}
 
-	function assertFormHidden() {
-		// todo list item showing		
-		expect(find(elm, 'li div 0').hasClass('ng-hide')).toBe(false);
-		expect(find(elm, 'li span 0').text()).toEqual(todo.text);
-		// form should be hidden
-		expect(find(elm, 'form').hasClass('ng-hide')).toBe(true);
-	}
-
-	it('should show todo item', function() {
-		assertFormHidden();
-	});
-
-	it('should show form', function() {
-		assertFormHidden();
-
-		// click on todo item to edit
-		find(elm, 'li span 0').triggerHandler('click')
-		// todo list item is hidden
-		expect(find(elm, 'li div 0').hasClass('ng-hide')).toBe(true);
-		// form is showing
-		expect(find(elm, 'form').hasClass('ng-hide')).toBe(false);	
-	});
-
-	it('should save todo on form submit', function() {
-		spyOn(TodoService, 'save').and.callFake(function(todo) {
-			return todo;
-		});
-
-		assertFormHidden();
-
-		// click on todo item to edit
-		find(elm, 'li span 0').triggerHandler('click')
-
-		var newText = 'Finish homework';
-		scope.$apply(function() {
-			find(elm, 'li 0').isolateScope()._todo_.text = newText;	
-		});
-
-		find(elm, 'li button 0').triggerHandler('click');
-		expect(TodoService.save).toHaveBeenCalledWith({
-			id: todo.id,
-			text: newText,
-			done: todo.done
-		});
-		expect(elm.find('textarea').val()).toBe(newText);
+	it('should show list with todo items', function() {
+		assertListIsNotEmpty();		
 	})
 
-	it('should delete the todo', function() {
-		spyOn(TodoService, 'delete').and.callFake(function(id) {
-			return id;
+	it('should show empty list', function() {
+		scope.$apply(function() {
+			scope.todos = [];	
 		});
-
-		//spyOn(elm, '$remove');
-		
-		var idToDelete = todo.id;
-
-		// delete button should be defined
-		expect(find(elm, 'button 1').text()).toBe('Delete');
-		// delete the todo
-		find(elm, 'button 1').triggerHandler('click');
-
-		expect(TodoService.delete).toHaveBeenCalledWith(idToDelete);
-		expect(find(elm, 'li').length).toBe(0);
+		expect(helper.elFind(elm, 'div a').length).toBe(0);
 	});
+
+	it('should go to item page when clicked', function() {
+		assertListIsNotEmpty();
+		var item1 = helper.elFind(elm, 'li 0');
+		helper.elFind(item1, 'span 0').triggerHandler('click');
+		expect($location.path).toHaveBeenCalledWith('/todos/' + todo1.id);
+	});
+
 
 });
 
