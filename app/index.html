@@ -22,20 +22,6 @@
 	<script src="/views/todo-edit.controller.js"></script>
 	<script src="/components/todo-edit-form.directive.js"></script>
 	<script src="/lib/material-design-lite/material.min.js"></script>
-	<script type="text/javascript">
-		angular.module('Yata')
-		.directive('fixMdlRender', function() {
-			return {
-				restrict: 'A',
-				link: function(scope, el) {
-					el.ready(function() {
-						componentHandler.upgradeElement(el[0]);
-					});
-				}
-			}
-		});
-
-	</script>
 </body>
 </html>
 

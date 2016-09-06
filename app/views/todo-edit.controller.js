@@ -21,10 +21,9 @@ angular.module('Yata')
 		$location.path('/todos')
 	}
 
-	var todoId = $routeParams.id;
-	if(!(todoId !== undefined && todoId !== 'new' && 
-			($scope.todo = TodoService.get(parseInt(todoId, 10))) != null)) {	
+	if($location.path() !== '/todos/new' && (!$routeParams.id 
+			|| ($scope.todo = TodoService.get(parseInt($routeParams.id, 10))) === null)) {
 		$scope.finish();
-	} 
+	}
 
 });

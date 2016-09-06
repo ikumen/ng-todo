@@ -3,7 +3,7 @@ describe('Yata, todo-edit controller', function() {
 	var $controller,
 		$scope = {},
 		$routeParams = {},
-		$location,
+		$location = {},
 		TodoService,
 		helper,
 		todo;
@@ -15,7 +15,7 @@ describe('Yata, todo-edit controller', function() {
 		$controller = _$controller_;
 		helper = testHelper;
 
-		$location = jasmine.createSpyObj('$location', ['path']);
+		//$location = jasmine.createSpyObj('$location', ['path']);
 		TodoService = {get: helper.noOp};
 		todo = {
 			id: 1,
@@ -27,7 +27,14 @@ describe('Yata, todo-edit controller', function() {
 	}));
 
 	function setUpTestFor(id) {
-		$routeParams.id = id;
+		$location.path = helper.noOp;
+		if(id === 'new') {
+			spyOn($location, 'path').and.returnValue('/todos/new');
+		} else {
+			spyOn($location, 'path').and.returnValue('/todos/' + id);
+			$routeParams.id = id;
+		}
+		
 		$controller('TodoEditCtrl', {
 			$scope: $scope,
 			$routeParams: $routeParams,

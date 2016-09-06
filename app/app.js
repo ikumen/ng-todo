@@ -5,4 +5,15 @@ angular.module('Yata', ['ngRoute'])
 		.otherwise({
 			redirectTo: '/todos'
 		});
-});
+})
+.directive('fixMdlRender', function() {
+	return {
+		restrict: 'A',
+		link: function(scope, el) {
+			el.ready(function() {
+				componentHandler.upgradeElement(el[0]);
+			});
+		}
+	}
+})
+;

@@ -17,6 +17,7 @@ module.exports = function(config) {
     files: [
         'app/lib/angular/angular.min.js',
         'app/lib/angular-route/angular-route.min.js',
+        'app/lib/material-design-lite/material.min.js',
         'node_modules/angular-mocks/angular-mocks.js',
         'app/app.js',
         'app/services/**/*.js',
