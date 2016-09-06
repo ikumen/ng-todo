@@ -27,7 +27,7 @@ describe('Yata, app-layout directive', function() {
 		scope.$digest();
 	}));
 
-	fit('should render the page with app layout', function() {
+	it('should render the page with app layout', function() {
 		var header = utils.find(elm, 'header app-layout-header 0');
 		expect(header.text()).toBe('This is the header');
 

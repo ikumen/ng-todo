@@ -10,14 +10,9 @@
     	<!-- Add spacer, to align navigation to the right -->
     	<div class="mdl-layout-spacer"></div>
     	<!-- Navigation. We hide it in small screens. -->
-    	<span ng-if="todo.id">
-	      <button aria-expanded="false" role="button" fix-mdl-render 
-	          tabindex="0" class="mdl-button mdl-js-button mdl-button--icon mdl-js-ripple-effect yata-button__dark"
-	          ng-click="delete(todo)">
-	        <i class="material-icons">delete</i>
-	      </button>  
-	      <yata-done-button todo="todo"></yata-done-button>
-      </span>
+    	<yata-delete-button todo="todo" on-finish="finish()">
+    	</yata-delete-button>
+      <yata-done-button todo="todo"></yata-done-button>
     </div>
 	</app-layout-header>
 	<app-layout-body>
