@@ -22,8 +22,9 @@ angular.module('Yata')
 	}
 
 	var todoId = $routeParams.id;
-	if(todoId !== undefined && todoId !== 'new') {
-		$scope.todo = TodoService.get(parseInt(todoId, 10));
-	}
+	if(!(todoId !== undefined && todoId !== 'new' && 
+			($scope.todo = TodoService.get(parseInt(todoId, 10))) != null)) {	
+		$scope.finish();
+	} 
 
-})
+});
