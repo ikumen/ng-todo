@@ -3,11 +3,21 @@ html, body {
 	font-size: 16px;
 }
 
+a {
+	color: inherit;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
 .app-container {
 	background-color: #fff;
 	max-width: 1024px;
+	position: relative;
 	/* take up the full length of browser window */
-	height:100vh; 
+	height: 100vh; 
 	/* center app container in window */
 	margin: 0 auto;
 }
@@ -15,15 +25,26 @@ html, body {
 /* when not using drawer, this will remove padding that's
 	occupied by drawer icon */
 .mdl-layout__header-row {
-	padding-left: 24px; /* TODO: mobile 16px; */
+	padding-left: 24px; 
 }
 
 .mdl-layout__content {
 	padding-top: 24px;
 	padding-right: 24px;
 	padding-left: 24px;
+	padding-bottom: 60px;
 }
 
+/* default is just too big height-wise 32x16 */
+.mdl-mini-footer {
+	padding: 16px 24px;
+	color: #aaa;
+	font-size: 14px;
+	/*border-top: solid 1px #f2f2f2;*/
+	background-color: #f2f2f2;
+}
+
+/* get rid of glowing blue box */
 textarea:focus, input:focus {
 	outline: none;
 }
@@ -41,12 +62,21 @@ textarea:focus, input:focus {
   color: rgb(76, 175, 80);  
 }
 
+/* needed to avoid using position: fixed; */
+.fab-wrapper {
+	display: inline-block;
+  position: absolute;
+	z-index: 100;
+  bottom: 0;
+  right: 0;	
+}
+
 /* float the fab add button over bottom right corner */
 .yata-button__add {
 	/* use absolute instead of fixed, since we're 
 		position within a relative parent */
 	position: absolute;
-	bottom: 24px;
+	bottom: 66px;
 	right: 24px;
 }
 
@@ -70,9 +100,8 @@ textarea:focus, input:focus {
 	white-space: nowrap;
 }
 
-.yata-list__item_content a, .yata-list__item_content a:hover {
-	text-decoration: none;
-	color: rgba(0,0,0,.87);
+.yata-list__item_content span {
+	cursor: pointer;
 }
 
 .yata-list__item_status {
@@ -85,12 +114,10 @@ textarea:focus, input:focus {
 	.mdl-layout__header-row {
 		padding-left: 16px; 
 	}
-
 	.yata-button__add {
-		bottom: 16px;
 		right: 16px;
-	}	
-	.mdl-layout__content {
+	}
+	.mdl-layout__content, .mdl-mini-footer {
 		padding-right: 16px;
 		padding-left: 16px;
 	}
